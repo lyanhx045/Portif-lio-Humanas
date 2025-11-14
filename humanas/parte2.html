@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta 3D Interativa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=no">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+html, body {
+    overflow: hidden;
+    height: 100%;
+}
+
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+    }
+    .container {
+      gap: 40px;
+      max-width: 1200px;
+      justify-content: center;
+      align-content: flex-start;
+      padding: 50px;
+    }
+
+    .carta-wrapper {
+      position: absolute;
+      transition: all 0.6s ease;
+    }
+
+    .img-carta {
+        width: 100%;
+    }
+
+    .area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(68, 37, 8);
+  font-size: 0.9rem;
+  text-align: center;
+  pointer-events: none;
+    font-family: "Gloria Hallelujah", cursive;
+  font-style: normal;
+  font-weight: 400;
+    }
+
+    .carta-wrapper {
+      width: 25vw;
+      height: 37.5vw;
+      max-width: 180px;
+      max-height: 270px;
+      position: absolute;
+      cursor: pointer;
+      perspective: 1000px;
+    }
+
+    .carta-hitbox {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .carta {
+      width: 25vw;
+      height: 37.5vw;
+      max-width: 180px;
+      max-height: 270px;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+    }
+
+    /* Efeito de flip no hover (só se não estiver ativa) */
+    .carta:not(.ativa):hover {
+      transform: rotateY(180deg);
+    }
+
+    /* Estado ativo (clicada) - fica em 30 graus */
+    .carta.ativa {
+      transform: rotateY(30deg) !important;
+    }
+
+    .face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+html, body {
+    overflow: hidden;
+    height: 100%;
+}
+
+    .verso {
+      transform: rotateY(180deg);
+    }
+
+    .carta-wrapper {
+      position: absolute;
+    }
+
+    .painel {
+      position: fixed;
+      width: 250px;
+      height: 200px;
+    background: linear-gradient(135deg, #c1a78b 0%, #835a0d 100%);
+    box-shadow: 
+        0 8px 30px rgba(0, 0, 0, 0.4),
+        inset 0 1px 4px rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+      z-index: 1000;
+    font-family: "Gloria Hallelujah", cursive;
+    font-size: 70%;
+    }
+
+    .painel.ativo {
+      opacity: 1;
+      transform: translate(100%, 25%);
+      pointer-events: auto;
+    }
+    
+    #carta-1.ativa-wrapper, 
+    #carta-2.ativa-wrapper,
+    #carta-3.ativa-wrapper,
+    #carta-4.ativa-wrapper,
+    #carta-5.ativa-wrapper,
+    #carta-6.ativa-wrapper,
+    #carta-7.ativa-wrapper{
+      position: absolute;
+      top: 50%;
+      left: 35%;
+      transform: translate(-50%, -50%) scale(1.7);
+      z-index: 9999999;
+    }
+
+    #carta-1, 
+    #carta-2,
+    #carta-3,
+    #carta-4,
+    #carta-5,
+    #carta-6,
+    #carta-7{
+  position: absolute;
+  transform: translate(-50%, -50%);
+    }
+
+    #carta-1, 
+    #carta-2,
+    #carta-3 {
+  top: 27.5%;
+    }
+
+    #carta-4, 
+    #carta-5,
+    #carta-6 {
+  top: 72.5%;
+    }
+
+    #carta-1,
+    #carta-4 {
+  left: 45%;
+    }
+
+    #carta-2,
+    #carta-5 {
+  left: 60%;
+    }
+
+    #carta-3,
+    #carta-6 {
+  left: 75%;
+    }
+
+    #carta-7 {
+  top: 50%;
+  left: 90%;
+    }
+
+    body {
+        background-image: url('img/fundo.png');
+  background-size: cover;       /* faz a imagem cobrir toda a área */
+  background-position: stard ;  /* centraliza a imagem */
+  background-repeat: no-repeat;
+    }
+    
+    @media (max-width: 980px) {
+
+    .painel {
+      width: 220px;
+      height: 100%;
+    }
+
+    .painel.ativo {
+      transform: translate(70%, 0);
+    }
+
+    #carta-1, 
+    #carta-2,
+    #carta-3 {
+  top: 27.5%;
+    }
+
+    #carta-4, 
+    #carta-5,
+    #carta-6 {
+  top: 50%;
+    }
+
+    #carta-1,
+    #carta-4 {
+  left: 20%;
+    }
+
+    #carta-2,
+    #carta-5,
+    #carta-7 {
+  left: 50%;
+    }
+
+    #carta-3,
+    #carta-6 {
+  left: 80%;
+    }
+
+    #carta-7 {
+  top: 72.5%;
+    }
+
+    .carta.ativa {
+      transform: rotateY(210deg) !important;
+    }
+
+    #carta-1.ativa-wrapper, 
+    #carta-2.ativa-wrapper,
+    #carta-3.ativa-wrapper,
+    #carta-4.ativa-wrapper,
+    #carta-5.ativa-wrapper,
+    #carta-6.ativa-wrapper,
+    #carta-7.ativa-wrapper{
+      transform: translate(-93%, -50%) scale(1.4) !important;
+    }
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+    }
+
+* {
+    -webkit-user-select: none; /* Safari, Chrome mobile */
+    -ms-user-select: none;     /* Internet Explorer e Edge antigo */
+    user-select: none;         /* Padrão moderno */
+    -webkit-touch-callout: none; /* iOS: bloqueia menu de copiar/colar */
+}
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+        .button-container {
+            perspective: 1000px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        #voltar {
+          perspective: 1000px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px !important;
+        }
+
+        .controle {
+            width: 150px;
+            height: 65px;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #8d6c58;
+            cursor: pointer;
+
+            overflow: visible;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            
+            background: linear-gradient(
+                135deg,
+                #836957 0%,
+                #896b58 15%,
+                #795946 30%,
+                #6f5241 50%,
+                #694a36 70%,
+                #694933 100%
+            );
+            
+            box-shadow: 
+                inset -2px -2px 5px rgba(0, 0, 0, 0.4),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.3),
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+            
+            background-size: 200% 200%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+        }
+
+        .controle::before {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 200%;
+            height: 200%;
+            transform: translateZ(0);
+            pointer-events: none;
+        }
+
+        .controle:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                inset -2px -2px 5px rgba(0, 0, 0, 0.4),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.3),
+                0 20px 45px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        .controle:active {
+            transform: translateY(-2px);
+            box-shadow: 
+                inset -1px -1px 3px rgba(0, 0, 0, 0.3),
+                inset 1px 1px 3px rgba(255, 255, 255, 0.2),
+                0 5px 15px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        .controle:focus {
+            outline: none;
+        }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="carta-wrapper" id="carta-1">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/matematica.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Numerologia e Matématica</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-1">
+        <p>Os egípcios desenvolveram um sistema numérico eficiente para cálculos de construção, comércio e impostos. Sua matemática permitiu medir terras, prever cheias do Nilo e projetar obras complexas com precisão.</p>
+      </div>
+    </div>
+    <div class="carta-wrapper" id="carta-2">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/economia.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Economia</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-2">
+        <p>A economia egípcia era baseada na agricultura, no controle das enchentes do Nilo e na administração estatal. A organização dos recursos — grãos, metais, trabalho e comércio — sustentava toda a sociedade.</p>
+      </div>
+    </div>
+    <div class="carta-wrapper" id="carta-3">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/mitologia.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Mitologia</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-3">
+        <p>A mitologia guiava a vida religiosa e política. Explicava fenômenos naturais, legitimava o poder dos faraós e influenciava rituais, arquitetura e decisões sociais.</p>
+      </div>
+    </div>
+    <div class="carta-wrapper" id="carta-4">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/arquitetura.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Arquitetura</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-4">
+        <p>A arquitetura egípcia se destaca por estruturas monumentais como pirâmides e templos. Usavam cálculos precisos, materiais duráveis e técnicas que garantiram obras que resistem há milênios.</p>
+      </div>
+    </div>
+    <div class="carta-wrapper" id="carta-5">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/engenharia.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Engenharia e Mecanismos</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-5">
+        <p>Engenheiros desenvolviam rampas, alavancas, ferramentas e técnicas de transporte para erguer construções gigantescas. Criaram sistemas de irrigação e máquinas simples que melhoravam o trabalho diário.</p>
+      </div>
+    </div>
+    <div class="carta-wrapper" id="carta-6">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/astrologia.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Astrologia e Astromia</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-6">
+        <p>A observação dos astros orientava o calendário agrícola, os rituais religiosos e a navegação. Eles identificaram constelações e entenderam padrões celestes com grande precisão.</p>
+      </div>
+    </div>
+    <div class="carta-wrapper" id="carta-7">
+      <div class="carta-hitbox"></div>
+      <div class="carta">
+        <div class="face frente">
+            <img src="img/medicina.png" class="img-carta">
+        </div>
+        <div class="face verso">
+            <img src="img/carta.png" class="img-carta">
+            <h2 class="area">Medicina</h2>
+        </div>
+      </div>
+      <div class="painel" id="painel-7">
+        <p>Os egípcios praticavam uma medicina avançada, combinando observação prática com crenças religiosas. Dominavam cirurgias simples, tratamentos com ervas e diagnósticos detalhados registrados em papiros.</p>
+      </div>
+    </div>
+  </div>
+
+    <div class="button-container" id="voltar">
+        <a class="controle" href="index.html">Voltar</a>
+    </div>
+
+  <script>
+    const cartaWrappers = document.querySelectorAll('.carta-wrapper');
+    let cartaAtiva = null;
+
+    cartaWrappers.forEach((wrapper) => {
+      const carta = wrapper.querySelector('.carta');
+      const painel = wrapper.querySelector('.painel');
+
+      wrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        // Se clicou na mesma carta que já está ativa, desativa
+        if (cartaAtiva === wrapper) {
+          carta.classList.remove('ativa');
+          painel.classList.remove('ativo');
+          wrapper.classList.remove('ativa-wrapper');
+          cartaAtiva = null;
+          return;
+        }
+
+        // Se tem outra carta ativa, desativa ela
+        if (cartaAtiva) {
+          const cartaAnterior = cartaAtiva.querySelector('.carta');
+          const painelAnterior = cartaAtiva.querySelector('.painel');
+          cartaAnterior.classList.remove('ativa');
+          painelAnterior.classList.remove('ativo');
+          cartaAtiva.classList.remove('ativa-wrapper');
+        }
+
+        // Ativa a carta clicada
+        carta.classList.add('ativa');
+        painel.classList.add('ativo');
+        wrapper.classList.add('ativa-wrapper');
+        cartaAtiva = wrapper;
+      });
+
+      wrapper.addEventListener('mouseover', () => {
+        if (!carta.classList.contains('ativa')) {
+          carta.style.transform = 'rotateY(180deg)';
+        }
+      });
+
+      wrapper.addEventListener('mouseout', () => {
+        if (!carta.classList.contains('ativa')) {
+          carta.style.transform = 'rotateY(0deg)';
+        }
+      });
+    });
+
+    // Clique em qualquer lugar da tela desativa a carta
+    document.addEventListener('click', () => {
+      if (cartaAtiva) {
+        const carta = cartaAtiva.querySelector('.carta');
+        const painel = cartaAtiva.querySelector('.painel');
+        carta.classList.remove('ativa');
+        painel.classList.remove('ativo');
+        cartaAtiva.classList.remove('ativa-wrapper');
+        cartaAtiva = null;
+      }
+    });
+  </script>
+</body>
+</html>
